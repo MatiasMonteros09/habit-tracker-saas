@@ -10,6 +10,15 @@ const db = new sqlite3.Database(dbPath, (err) => {
     console.error("Error al conectar con la base de datos", err);
   } else {
     console.log("Conectado a SQLite");
+
+    // Crear tabla si no existe
+    db.run(`
+      CREATE TABLE IF NOT EXISTS tareas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        titulo TEXT NOT NULL,
+        fecha TEXT NOT NULL
+      )
+    `);
   }
 });
 

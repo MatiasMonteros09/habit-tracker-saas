@@ -8,29 +8,40 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const tareas = [];
-// Ruta de prueba
+// Ruta raíz
 app.get("/", (req, res) => {
   res.send("Servidor funcionando");
 });
-app.get("/saludo", (req, res) => {
-  res.json({
-    mensaje: "Hola Mati, tu backend está funcionando correctamente",
+
+// Obtener todas las tareas
+app.get("/tareas", (req, res) => {
+  db.all("SELECT * FROM tareas", [], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: "Error al obtener tareas" });
+    }
+
+    res.json(rows);
   });
 });
+
+// Crear nueva tarea
 app.post("/tareas", (req, res) => {
-  const nuevaTarea = req.body;
+  const { titulo, fecha } = req.body;
 
-  app.get("/tareas", (req, res) => {
-    res.json(tareas);
-  });
+  db.run(
+    "INSERT INTO tareas (titulo, fecha) VALUES (?, ?)",
+    [titulo, fecha],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ error: "Error al guardar tarea" });
+      }
 
-  tareas.push(nuevaTarea);
-
-  res.json({
-    mensaje: "Tarea guardada",
-    tareas: tareas,
-  });
+      res.json({
+        mensaje: "Tarea guardada",
+        id: this.lastID,
+      });
+    },
+  );
 });
 
 // Puerto
