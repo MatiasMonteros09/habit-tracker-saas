@@ -44,6 +44,24 @@ app.post("/tareas", (req, res) => {
   );
 });
 
+// Eliminar tarea por ID
+app.delete("/tareas/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.run("DELETE FROM tareas WHERE id = ?", [id], function (err) {
+    if (err) {
+      return res.status(500).json({ error: "Error al eliminar tarea" });
+    }
+
+    if (this.changes === 0) {
+      return res.status(404).json({ mensaje: "Tarea no encontrada" });
+    }
+
+    res.json({ mensaje: "Tarea eliminada correctamente" });
+  });
+});
+
+
 // Puerto
 const PORT = 5000;
 
