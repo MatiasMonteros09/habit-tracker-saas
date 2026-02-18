@@ -61,6 +61,28 @@ app.delete("/tareas/:id", (req, res) => {
   });
 });
 
+// Actualizar tarea por ID
+app.put("/tareas/:id", (req, res) => {
+  const id = req.params.id;
+  const { titulo, fecha } = req.body;
+
+  db.run(
+    "UPDATE tareas SET titulo = ?, fecha = ? WHERE id = ?",
+    [titulo, fecha, id],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ error: "Error al actualizar tarea" });
+      }
+
+      if (this.changes === 0) {
+        return res.status(404).json({ mensaje: "Tarea no encontrada" });
+      }
+
+      res.json({ mensaje: "Tarea actualizada correctamente" });
+    }
+  );
+});
+
 
 // Puerto
 const PORT = 5000;
