@@ -42,9 +42,25 @@ const completarTarea = async (id) => {
   return await tareasRepository.completarTarea(id);
 };
 
+const toggleTarea = async (id) => {
+  // 1️⃣ Verificar que exista
+  const tarea = await tareasRepository.obtenerTareaPorId(id);
+
+  if (!tarea) {
+    throw new Error("Tarea no encontrada");
+  }
+
+  // 2️⃣ Invertir estado
+  const nuevoEstado = tarea.completada === 1 ? 0 : 1;
+
+  // 3️⃣ Persistir
+  return tareasRepository.toggleTarea(id, nuevoEstado);
+};
+
 module.exports = {
   obtenerTareas,
   obtenerTareaPorId,
   crearTarea,
   completarTarea,
+  toggleTarea,
 };

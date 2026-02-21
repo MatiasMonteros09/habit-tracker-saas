@@ -57,9 +57,23 @@ const completarTarea = (id) => {
   });
 };
 
+const toggleTarea = (id, nuevoEstado) => {
+  return new Promise((resolve, reject) => {
+    db.run(
+      "UPDATE tareas SET completada = ? WHERE id = ?",
+      [nuevoEstado, id],
+      function (err) {
+        if (err) reject(err);
+        else resolve({ id, completada: nuevoEstado });
+      },
+    );
+  });
+};
+
 module.exports = {
   obtenerTareas,
   obtenerTareaPorId,
   crearTarea,
   completarTarea,
+  toggleTarea,
 };

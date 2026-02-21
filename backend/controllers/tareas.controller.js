@@ -36,9 +36,19 @@ const completarTarea = async (req, res) => {
   }
 };
 
+const toggleTarea = async (req, res) => {
+  try {
+    const result = await tareasService.toggleTarea(req.params.id);
+    res.json({ mensaje: "Estado de tarea actualizado", result });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   obtenerTareas,
   obtenerTareaPorId,
   crearTarea,
   completarTarea,
+  toggleTarea,
 };
