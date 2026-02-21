@@ -27,8 +27,18 @@ const crearTarea = async (req, res) => {
   }
 };
 
+const completarTarea = async (req, res) => {
+  try {
+    const result = await tareasService.completarTarea(req.params.id);
+    res.json({ mensaje: "Tarea completada", result });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   obtenerTareas,
   obtenerTareaPorId,
   crearTarea,
+  completarTarea,
 };

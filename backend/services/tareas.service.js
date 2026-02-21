@@ -15,18 +15,36 @@ const obtenerTareaPorId = async (id) => {
 };
 
 const crearTarea = async (data) => {
-  const { titulo, fecha } = data;
+  const { titulo, descripcion, fecha } = data;
 
   // ✅ Validación (esto es lógica de negocio → service)
   if (!titulo) {
     throw new Error("El título es obligatorio");
   }
 
-  return await tareasRepository.crearTarea({ titulo, fecha });
+  return await tareasRepository.crearTarea({ titulo, descripcion, fecha });
+};
+
+const completarTarea = async (id) => {
+  // 1️⃣ Verificar que exista
+  const tarea = await tareasRepository.obtenerTareaPorId(id);
+
+  if (!tarea) {
+    throw new Error("Tarea no encontrada");
+  }
+
+  // 2️⃣ Evitar completar dos veces (lógica de negocio real)
+  if (tarea.completada === 1) {
+    throw new Error("La tarea ya está completada");
+  }
+
+  // 3️⃣ Completar
+  return await tareasRepository.completarTarea(id);
 };
 
 module.exports = {
   obtenerTareas,
   obtenerTareaPorId,
   crearTarea,
+  completarTarea,
 };

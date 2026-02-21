@@ -24,21 +24,36 @@ const obtenerTareaPorId = (id) => {
   });
 };
 
-const crearTarea = (titulo, descripcion) => {
+const crearTarea = ({ titulo, descripcion, fecha }) => {
   return new Promise((resolve, reject) => {
-    const sql = "INSERT INTO tareas (titulo, descripcion) VALUES (?, ?)";
+    db.run(
+      "INSERT INTO tareas (titulo, descripcion, fecha) VALUES (?, ?, ?)",
+      [titulo, descripcion, fecha],
+      function (err) {
+        if (err) reject(err);
+        else
+          resolve({
+            id: this.lastID,
+            titulo,
+            descripcion,
+            fecha,
+            completada: 0,
+          });
+      },
+    );
+  });
+};
 
-    db.run(sql, [titulo, descripcion], function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve({
-          id: this.lastID,
-          titulo,
-          descripcion,
-        });
-      }
-    });
+const completarTarea = (id) => {
+  return new Promise((resolve, reject) => {
+    db.run(
+      "UPDATE tareas SET completada = 1 WHERE id = ?",
+      [id],
+      function (err) {
+        if (err) reject(err);
+        else resolve({ id, cambios: this.changes });
+      },
+    );
   });
 };
 
@@ -46,4 +61,5 @@ module.exports = {
   obtenerTareas,
   obtenerTareaPorId,
   crearTarea,
+  completarTarea,
 };
