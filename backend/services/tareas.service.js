@@ -1,28 +1,28 @@
-const db = require("../database");
+const tareasRepository = require("../repositories/tareas.repository");
 
 const obtenerTareas = async () => {
-  const result = await db.query("SELECT * FROM tareas");
-  return result.rows;
+  return await tareasRepository.obtenerTareas();
 };
 
 const obtenerTareaPorId = async (id) => {
-  const result = await db.query("SELECT * FROM tareas WHERE id = $1", [id]);
-  return result.rows[0];
+  const tarea = await tareasRepository.obtenerTareaPorId(id);
+
+  if (!tarea) {
+    throw new Error("Tarea no encontrada");
+  }
+
+  return tarea;
 };
 
 const crearTarea = async (data) => {
-  const { titulo } = data;
+  const { titulo, fecha } = data;
 
+  // ✅ Validación (esto es lógica de negocio → service)
   if (!titulo) {
-    throw new Error("El titulo es obligatorio");
+    throw new Error("El título es obligatorio");
   }
 
-  const result = await db.query(
-    "INSERT INTO tareas (titulo) VALUES ($1) RETURNING *",
-    [titulo]
-  );
-
-  return result.rows[0];
+  return await tareasRepository.crearTarea({ titulo, fecha });
 };
 
 module.exports = {
