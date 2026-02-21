@@ -12,15 +12,39 @@ const db = new sqlite3.Database(dbPath, (err) => {
     console.log("Conectado a SQLite");
 
     // Crear tabla si no existe
-db.run(`
+    db.run(`
   CREATE TABLE IF NOT EXISTS tareas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     titulo TEXT NOT NULL,
     descripcion TEXT,
     fecha TEXT,
-    completada INTEGER DEFAULT 0)`
-    );
+    completada INTEGER DEFAULT 0)`);
   }
 });
+
+// Tabla habits
+db.run(`
+  CREATE TABLE IF NOT EXISTS habits (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    descripcion TEXT,
+    frecuencia TEXT,
+    activo INTEGER DEFAULT 1,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+  )
+`);
+
+db.run(`
+  CREATE TABLE IF NOT EXISTS habit_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    habit_id INTEGER NOT NULL,
+    fecha TEXT NOT NULL,
+    completado INTEGER DEFAULT 1,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(habit_id, fecha),
+    FOREIGN KEY (habit_id) REFERENCES habits(id)
+  )
+`);
+
 
 module.exports = db;
