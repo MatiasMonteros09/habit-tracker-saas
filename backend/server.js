@@ -1,6 +1,7 @@
 const tareasRoutes = require("./routes/tareas.routes");
 const habitsRoutes = require("./routes/habits.routes");
 const habitLogsRoutes = require("./routes/habitLogs.routes");
+const usersRoutes = require("./routes/users.routes");
 
 const db = require("./database");
 const express = require("express");
@@ -19,6 +20,8 @@ app.use("/tareas", tareasRoutes);
 app.use("/habits", habitsRoutes);
 //METRICAS Y ESTADISTICAS
 app.use("/habits", habitLogsRoutes);
+//USUARIOS
+app.use("/users", usersRoutes);
 
 // Puerto
 const PORT = 5000;
