@@ -10,6 +10,17 @@ const registrarUsuario = async (req, res) => {
   }
 };
 
+const loginUsuario = async (req, res) => {
+  try {
+    const usuario = await usersService.loginUsuario(req.body);
+
+    res.json(usuario);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   registrarUsuario,
+  loginUsuario,
 };
