@@ -18,21 +18,26 @@ const db = new sqlite3.Database(dbPath, (err) => {
     titulo TEXT NOT NULL,
     descripcion TEXT,
     fecha TEXT,
-    completada INTEGER DEFAULT 0)`);
+    completada INTEGER DEFAULT 0,
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  )
+`);
   }
 });
 
 // Tabla habits
 db.run(`
   CREATE TABLE IF NOT EXISTS habits (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  titulo TEXT NOT NULL,
-  descripcion TEXT,
-  activo INTEGER DEFAULT 1,
-  hora_recordatorio TEXT,
-  recordatorio_activo INTEGER DEFAULT 0,
-  created_at TEXT DEFAULT CURRENT_TIMESTAMP
-)`);
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    descripcion TEXT,
+    frecuencia TEXT,
+    user_id INTEGER NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  )
+`);
 
 db.run(`
     CREATE TABLE IF NOT EXISTS habit_logs (

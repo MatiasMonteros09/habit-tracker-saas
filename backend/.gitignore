@@ -1,4 +1,15 @@
-node_modules
+# Node modules
+node_modules/
+
+# Base de datos SQLite
+backend/database.db
+
+# Variables de entorno (más adelante)
 .env
-database.db
-super_secret_key
+
+# Logs
+logs/
+*.log
+
+# Sistema
+.DS_Store

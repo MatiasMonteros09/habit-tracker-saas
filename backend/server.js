@@ -1,7 +1,10 @@
+require("dotenv").config();
 const tareasRoutes = require("./routes/tareas.routes");
 const habitsRoutes = require("./routes/habits.routes");
 const habitLogsRoutes = require("./routes/habitLogs.routes");
 const usersRoutes = require("./routes/users.routes");
+const dashboardRoutes = require("./routes/dashboard.routes");
+const errorMiddleware = require("./middlewares/error.middleware");
 
 const db = require("./database");
 const express = require("express");
@@ -22,9 +25,13 @@ app.use("/habits", habitsRoutes);
 app.use("/habits", habitLogsRoutes);
 //USUARIOS
 app.use("/users", usersRoutes);
+//CONTADOR
+app.use("/dashboard", dashboardRoutes);
+//Middleware de errores
+app.use(errorMiddleware);
 
 // Puerto
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);

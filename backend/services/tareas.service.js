@@ -1,7 +1,7 @@
 const tareasRepository = require("../repositories/tareas.repository");
 
-const obtenerTareas = async () => {
-  return await tareasRepository.obtenerTareas();
+const obtenerTareas = async (userId) => {
+  return await tareasRepository.obtenerTareas(userId);
 };
 
 const obtenerTareaPorId = async (id) => {
@@ -14,15 +14,14 @@ const obtenerTareaPorId = async (id) => {
   return tarea;
 };
 
-const crearTarea = async (data) => {
+const crearTarea = async (data, userId) => {
   const { titulo, descripcion, fecha } = data;
 
-  // ✅ Validación (esto es lógica de negocio → service)
   if (!titulo) {
-    throw new Error("El título es obligatorio");
+    throw new Error("El titulo es obligatorio");
   }
 
-  return await tareasRepository.crearTarea({ titulo, descripcion, fecha });
+  return await tareasRepository.crearTarea(titulo, descripcion, fecha, userId);
 };
 
 const completarTarea = async (id) => {

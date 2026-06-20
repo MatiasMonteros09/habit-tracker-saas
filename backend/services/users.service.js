@@ -42,7 +42,7 @@ const loginUsuario = async (data) => {
 
   const token = jwt.sign(
   { userId: usuario.id },
-  "super_secret_key",
+  "mi_clave_super_secreta_2026",
   { expiresIn: "24h" }
 );
 

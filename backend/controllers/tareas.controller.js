@@ -20,7 +20,10 @@ const obtenerTareaPorId = async (req, res) => {
 
 const crearTarea = async (req, res) => {
   try {
-    const tarea = await tareasService.crearTarea(req.body);
+    const userId = req.user.userId;
+
+    const tarea = await tareasService.crearTarea(req.body, userId);
+
     res.status(201).json(tarea);
   } catch (error) {
     res.status(400).json({ error: error.message });

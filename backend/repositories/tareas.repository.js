@@ -1,13 +1,12 @@
 const db = require("../database");
 
-const obtenerTareas = () => {
+const obtenerTareas = (userId) => {
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM tareas", [], (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(rows);
-      }
+    const sql = "SELECT * FROM tareas WHERE user_id = ?";
+
+    db.all(sql, [userId], (err, rows) => {
+      if (err) reject(err);
+      else resolve(rows);
     });
   });
 };
@@ -24,23 +23,17 @@ const obtenerTareaPorId = (id) => {
   });
 };
 
-const crearTarea = ({ titulo, descripcion, fecha }) => {
+const crearTarea = (titulo, descripcion, fecha, userId) => {
   return new Promise((resolve, reject) => {
-    db.run(
-      "INSERT INTO tareas (titulo, descripcion, fecha) VALUES (?, ?, ?)",
-      [titulo, descripcion, fecha],
-      function (err) {
-        if (err) reject(err);
-        else
-          resolve({
-            id: this.lastID,
-            titulo,
-            descripcion,
-            fecha,
-            completada: 0,
-          });
-      },
-    );
+    const sql = `
+      INSERT INTO tareas (titulo, descripcion, fecha, user_id)
+      VALUES (?, ?, ?, ?)
+    `;
+
+    db.run(sql, [titulo, descripcion, fecha, userId], function (err) {
+      if (err) reject(err);
+      else resolve({ id: this.lastID, titulo, descripcion, fecha });
+    });
   });
 };
 
@@ -77,4 +70,3 @@ module.exports = {
   completarTarea,
   toggleTarea,
 };
-
